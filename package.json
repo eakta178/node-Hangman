@@ -1,0 +1,27 @@
+{
+  "name": "hangman",
+  "version": "1.0.0",
+  "description": "game",
+  "main": "hangman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eakta178/node-Hangman.git"
+  },
+  "keywords": [
+    "hangman",
+    "letter",
+    "word"
+  ],
+  "author": "Eakta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eakta178/node-Hangman/issues"
+  },
+  "homepage": "https://github.com/eakta178/node-Hangman#readme",
+  "dependencies": {
+    "inquirer": "^5.0.1"
+  }
+}
