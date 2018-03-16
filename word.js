@@ -1,19 +1,41 @@
+var Letter = require('./letter.js')
 
-//Constructor to choose a word
-class ComptGuess{
-    constructor(){
-        this.movie= ['FROZEN', 'NEMO', 'SMURF','DORY']
-        this.computerGuess = function() {
-            const compGuess= this.movie[Math.floor(Math.random() * this.movie.length)];
-            return compGuess;
+var Word = function(word) {
+	this.letters = word
+	var hiddenWord = []
+	var correctCount = 0
+	for (var i = 0; i < this.letters.length; i++) {
+			hiddenWord[i] = new Letter(this.letters[i])
+		}
 
-        };
-        this.printStats = function() {
-            console.log("Computer Guess was: " + this.computerGuess());
-            console.log("\n-------------\n");
-            };
-        }
+	this.newWord = function(callback) {
+		var correctCount = 0
+		var displayBoolean = function(result) {
+			booleanResult = result
+			if (booleanResult != '_') {
+				correctCount++
+			}
+			process.stdout.write(result + " ")
+		}
+		for (var i = 0; i < this.letters.length; i++) {
+			hiddenWord[i].wordGuess(displayBoolean)
+		}
+		callback(correctCount)
+	}
+
+	this.wordCount = function() {
+		return this.letters.length;
+	}
+
+
+	this.characterGuessed = function(guess, callback) {
+		for (var i = 0; i < this.letters.length; i++) {
+			hiddenWord[i].compareGuess(hiddenWord[i].letter, guess)
+		}
+	}
+
+
 }
 
 
-module.exports= ComptGuess;
+module.exports = Word

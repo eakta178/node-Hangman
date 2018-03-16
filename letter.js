@@ -1,33 +1,30 @@
-var CompG = require("./word.js");
 
+var Letter = function(letter, guess) {
+// A string value to store the underlying character for the letter
+	this.letter = letter
 
-class Letter{
-    constructor(){
-        
-        //function to replace letter at an index of the string
-        this.setCharAt = function(str,index,chr){
-            if(index > str.length-1) return str;
-            var temp1=str.substr(0,index);
-            console.log('temp1log: ' + temp1);
-            var temp2=str.substr(index+1);
-            console.log('temp2log: '+ temp2);
-        
-            return temp1+chr+temp2;
-        };
-        // display empty spaces
-        this.displayEmpty = function(){
-            const cg = new CompG();
-            const compG = cg.computerGuess();
-            for (let i = 0; i < compG.length; i++) {
-                console.log("_");
-            }
-        };
-        this.showLength= function(compG) {
-               console.log( 'LENGTH OF THE WORD : ' + compG.computerGuess().length);
-            }
-        
+// A boolean value that stores whether that letter has been guessed yet
+	this.guess = 0
+	this.wordGuess = function(callback) {
+		if (this.guess) {
+			callback(this.letter)
+		} else {
+			callback('_')
+		}
+	}
 
-    }
+	this.compareGuess = function(letterGuess, letter) {
+		if (this.guess === 1) {
+			this.guess = 1
+		} else {
+			if (letterGuess === letter) {
+				this.guess = 1
+			} else {
+				this.guess = 0
+			}
+		}
+
+	}
 }
-	
-    module.exports= Letter;
+
+module.exports = Letter

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/eakta178/node-Hangman#readme",
   "dependencies": {
-    "inquirer": "^5.0.1"
+    "inquirer": "^5.0.1",
+    "random-word": "^2.0.0"
   }
 }

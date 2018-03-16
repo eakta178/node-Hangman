@@ -1,117 +1,62 @@
-let inquirer = require("inquirer");
-let CompG = require("./word.js");
-let Letter = require("./letter.js");
+var Word = require('./word.js')
+var Letter = require('./letter.js')
+var inquirer = require('inquirer')
+var randomWord = require('random-word')
 
 
-class Game{
-    constructor(win=0,totalGuess=15,letterGuessed=[],displayedWord=[]){
-        this.win = win;
-        this.totalGuess = totalGuess;
-        this.letterGuessed = letterGuessed;
-        this.displayedWord = displayedWord;
-
-
-        this.printStats = function() {
-            console.log( 'WINS: ' + this.win  + '\nNUMBER OF GUESSES REMAINING: ' + this.totalGuess + '\nLETTERS ALREADY GUESSED: ' + this.letterGuessed);
-            console.log("\n-------------\n");
-            };
-        
-        this.playGame = function(){
-            const cg = new CompG();
-            const compG = cg.computerGuess();
-            const letter = new Letter();
-            let count = 0;
-            console.log("NEW GAME");
-            console.log('Total Guess Remaining',this.totalGuess);
-            console.log('computer guess is: ',compG);
-            
-            inquirer.prompt([
-                {
-                  input: "input",
-                  name: "guess",
-                  message: "Guess a Letter",
-                  validate: function(value) {
-                    if (isNaN(value) === true ) {
-                      return true;
-                    }
-                    return false;
-                    }
-                } 
-              ]).then(function(answers) {
-                  console.log(answers.guess);
-                  console.log('Total Guess Remaining',this.totalGuess);
-
-                if (this.totalGuess>0) {
-            
-                    if (this.letterGuessed.includes(answers.guess))  
-                        {
-                        // display choose another letter
-                        console.log('Letter used before.Please choose another letter!');
-                        }
-
-                    //Compare user key with word letters
-
-                    else if (compG.includes(answers.guess))
-                    {
-                        
-                        //Get the letter location & replace the _ with the letter
-                        let n = compG.indexOf(answers.guess);
-                        //console.log(n);
-                        console.log(this.displayedWord);
-                        letter.setCharAt(displayedWord,n,userkey);
-
-                        //insert word in the position & display                  
-                        this.totalGuess--;
-                        // display totalGuess in Guess Remaining
-                        this.letterGuessed.push(answers.guess);
-                        console.log(this.letterGuessed);
-                        console.log('display word: '+ this.displayedWord);
-                        playGame();
-                        //display letter guess update
-                        if (this.displayedWord === compG) {
-                            win++;
-                            compG = cg.computerGuess();
-                            letter.showLength(compG);
-                            this.totalGuess = 15;
-                            this.etterGuessed = [];
-                            this.displayedWord = [];
-                            
-                            console.log(this.displayedWord);
-                            letter.displayEmpty();
-                            console.log('YOU WON! GAME RESTARTED');
-                        }
-
-                    }
-                    else
-                    {
-                        // display totalGuess in Guess Remaining
-                        this.totalGuess--;
-                        //display letter guess update
-                        this.letterGuessed.push(answers.guess);
-                        console.log(this.letterGuessed);
-                    }
-                }
-                else
-                {
-                    compG = cg.computerGuess();
-                    letter.showLength(compG);
-                    this.win = 0;
-                    this.totalGuess = 15;
-                    this.letterGuessed = [];
-                    this.displayedWord = []; 
-                    console.log(displayedWord);
-                    letter.displayEmpty();
-                    console.log('YOU LOST! GAME RESTARTED');
-                }
-                    this.printStats();
-                })
-            }
-        }
-        
-        
-
-    
+var newWordResult = function(result) {
+	correctCount = result
+	console.log("correct count index " + correctCount)
 }
 
-const startGame = new Game();
-console.log(startGame.playGame());
+var guessArray = []
+var count = 0
+
+var newGame = function () {
+	count = 0
+	guessArray = []
+	var wordTest = new Word(randomWord())
+	console.log(wordTest.letters)
+
+
+	var askQuestion = function() {
+		if (count<10) {
+			inquirer.prompt([
+				{
+					name: "guess",
+					message: "Enter in your guess!"
+				}
+
+			]).then(function(answers){
+				if(guessArray.indexOf(answers.guess) === -1) {
+					guessArray.push(answers.guess)
+				} else {
+					console.log("You've already guessed this letter")
+					count--
+				}
+				wordTest.characterGuessed(answers.guess)
+				wordTest.newWord(newWordResult)
+				count++
+				console.log("correct count " + correctCount)
+				console.log("word length " + wordTest.letters.length)
+				if(correctCount === wordTest.letters.length) {
+					console.log("you guessed the word correctly!")
+					newGame()
+				} else {
+					console.log("You have " + (10-count) + " guesses left :(")
+					askQuestion()
+				}			
+			})
+			
+		} else {
+			console.log("you have no more guesses!")
+			newGame()
+		}
+
+	}
+
+	askQuestion()
+}
+
+newGame()
+
